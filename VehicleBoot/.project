@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>VehicleBoot</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.windriver.ide.core.wrbuilder</name>
+			<triggers>clean,full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.windriver.ide.osconfig.core.wrbspnature</nature>
+		<nature>com.windriver.ide.core.wrcorenature</nature>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>CD6011_bsp</name>
+			<type>2</type>
+			<locationURI>WIND_HOME/vxworks-6.8/target/config/CD6011_bsp</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>

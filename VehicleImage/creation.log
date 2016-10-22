@@ -1,0 +1,59 @@
+Output of C:\WindRiver\vxworks-6.8\host\x86-win32\bin\vxprj.bat create C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp gnu C:/WindRiver/MyWorkspace/VehicleImage/VehicleImage.wpj:
+
+Creating Project ...
+{parsing the BSP Makefile...}
+{extract user defined rules from BSP Makefile...}
+{bootrom.pxe: bootrom.bin pxeBoot.bin}
+{cat pxeBoot.bin bootrom.bin > bootrom.pxe}
+{#   vxWorks.st_rom	- bootable vxWorks.st(compressed): upper mem}
+{#   bootrom		- bootrom(compressed):		   upper mem}
+{#   bootrom_uncmp	- bootrom:			   upper mem}
+{romcard_bootrom_512.hex:	depend.$(BSP_NAME) romcard.o bootrom_uncmp}
+{- @ $(RM) $@}
+{$(LD) -o romcard -X -N -e _romcard romcard.o}
+{$(ROMSIZEPROG) -b 7fe00 bootrom_uncmp}
+{$(BINHEX) -a 0 bootrom_uncmp | $(SED) -e "/S9/d" > $@}
+{$(BINHEX) -a 7fe00 -b romcard >> $@}
+{- @ $(RM) romcard.o romcard}
+{$(POST_HEX_BUILD_RULE)}
+{romcard_bootrom_256.hex:	depend.$(BSP_NAME) romcard.o bootrom_uncmp}
+{- @ $(RM) $@}
+{$(LD) -o romcard -X -N -e _romcard romcard.o}
+{$(ROMSIZEPROG) -b 3fe00 bootrom_uncmp}
+{$(BINHEX) -a 0 bootrom_uncmp | $(SED) -e "/S9/d" > $@}
+{$(BINHEX) -a 3fe00 -b romcard >> $@}
+{- @ $(RM) romcard.o romcard}
+{$(POST_HEX_BUILD_RULE)}
+{romcard_vxWorks_st_512.hex:	depend.$(BSP_NAME) romcard.o vxWorks.st_rom}
+{- @ $(RM) $@}
+{$(LD) -o romcard -X -N -e _romcard romcard.o}
+{$(ROMSIZEPROG) -b 7fe00 vxWorks.st_rom}
+{$(BINHEX) -a 0 vxWorks.st_rom | $(SED) -e "/S9/d" > $@}
+{$(BINHEX) -a 7fe00 -b romcard >> $@}
+{- @ $(RM) romcard.o romcard}
+{$(POST_HEX_BUILD_RULE)}
+{creating the project file...}
+{creating a default build spec for PENTIUM4 gnu ...}
+{adding source-less BSP objects C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/./KEY/vxbI8042Kbd.o C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/./APIC/vxbIoApicIntr.o C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/./ICH/vxbIntelIchStorage.o C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/./PIO/PciIoCntLib.o C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/./ICH/bootFsLoad.o C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/./PCAN/PciCanLib.o C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/./SIO/vxbNs16550Sio.o C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/./USB/usb2MscXBD.o C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/./USB/usb2Msc.o to EXTRA_MODULES.}
+{adding source-less BSP objects  to BOOT_EXTRA.}
+{creating a component configuration...}
+{calculating included components...}
+ignoring unknown components INCLUDE_ANSI_ESC_SEQUENCE INCLUDE_CONSTANT_RDY_Q INCLUDE_CPU_PROBE INCLUDE_ELF INCLUDE_ICH3 INCLUDE_IPNET_PACKET_POOL_3 INCLUDE_IPNET_PACKET_POOL_4 INCLUDE_IPNET_PACKET_POOL_5 INCLUDE_IPNET_PACKET_POOL_6 INCLUDE_SYS_HW_INIT_0 INCLUDE_VXB_CMDLINE
+{calculating parameter values...}
+{adding files to project...}
+{generating configuration files...}
+{computing file dependencies...}
+{generating dependencies (sysALib.s)} 0 8
+{generating dependencies (sysLib.c)} 1 8
+{generating dependencies (romInit.s)} 2 8
+{generating dependencies (romStart.c)} 3 8
+{generating dependencies (usrAppInit.c)} 4 8
+{generating dependencies (usrRtpAppInit.c)} 5 8
+{generating dependencies (prjConfig.c)} 6 8
+{generating dependencies (linkSyms.c)} 7 8
+done
+{Validating the configuration...}
+done
+{saving the project...}
+done
+Project created in : C:\WindRiver\MyWorkspace\VehicleImage\VehicleImage.wpj

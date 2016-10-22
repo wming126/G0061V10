@@ -1,0 +1,5 @@
+set WIND_BASE C:/WindRiver/vxworks-6.8
+set VSB_DIR C:/WindRiver/vxworks-6.8/target/lib
+set BSP_DIR C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp
+set ANALYSIS_DKM_DIR C:/WindRiver/vxworks-6.8/target/lib/pentium/PENTIUM4/common/dkm/analysis
+set PRJ_FULL_PATH C:/WindRiver/MyWorkspace/VehicleImage

@@ -1,0 +1,7 @@
+C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/KEY/vxbI8042Kbd.o
+C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/APIC/vxbIoApicIntr.o
+C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/ICH/vxbIntelIchStorage.o
+C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/PIO/PciIoCntLib.o
+C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/ICH/bootFsLoad.o
+C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/PCAN/PciCanLib.o
+C:/WindRiver/vxworks-6.8/target/config/CD6011_bsp/SIO/vxbNs16550Sio.o
