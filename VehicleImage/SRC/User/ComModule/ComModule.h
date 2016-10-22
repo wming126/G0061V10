@@ -36,12 +36,15 @@ typedef struct ComQmsg_s
 {
     char time[24];
     unsigned int num;       /* 数据包计数 */
-    int ax;                 /* X陀螺仪数据 */
-    int ay;                 /* y陀螺仪数据 */
-    int az;                 /* z陀螺仪数据 */
-    int wx;                 /* z陀螺仪数据 */
-    int wy;                 /* y加表数据 */
-    int wz;                 /* z加表数据 */
+    int fog_gx;             /* fog陀螺仪数据 */
+    int fog_gy;             /* fog陀螺仪数据 */
+    int fog_gz;             /* fog陀螺仪数据 */
+    int mems_gx;            /* mems陀螺仪数据 */
+    int mems_gy;            /* mems陀螺仪数据 */
+    int mems_gz;            /* mems陀螺仪数据 */
+    int ax;                 /* X加表数据 */
+    int ay;                 /* y加表数据 */
+    int az;                 /* z加表数据 */
     short temp;             /* 温度 */
 } ComQmsg_t;
 

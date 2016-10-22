@@ -9,7 +9,7 @@
 当前版本:   V1.0
 
 修改记录:   2016-06-23  V1.0    王 明 创建
-           2016-09-23 V1.0 	王明 修改 解决无法删除can任务bug
+           2016-09-23 V1.0  王明 修改 解决无法删除can任务bug
 ********************************************************************/
 #include "semLib.h"
 #include "drv\pci\pciIntLib.h"
@@ -49,6 +49,7 @@ typedef struct MangeIoCnt_s
 typedef struct MangeCom_s
 {
     FILE *ComFileFd;                /* 文件描述符 */
+    FILE *ComFileFd2;                /* 文件描述符 */
     int ComTid;                     /* 任务ID */
 } MangeCom_t;
 
@@ -474,36 +475,36 @@ int RemoveMangeFileModule(void)
     /* 删除CAN管理模块创建的资源 */
     for(CanFd = 0; CanFd < MAX_CAN; CanFd++)
     {
-    	/* 如果任务已经创建则删除任务 */
+        /* 如果任务已经创建则删除任务 */
         if(s_MangeCan.Tid[CanFd] > 0)
         {
-        	ret = taskDelete(s_MangeCan.Tid[CanFd]);
-        	if(ret < 0)
-        	{
-        		printf("taskDelete(s_MangeCan.Tid[CanFd] faild!\n");
-        	}
+            ret = taskDelete(s_MangeCan.Tid[CanFd]);
+            if(ret < 0)
+            {
+                printf("taskDelete(s_MangeCan.Tid[CanFd] faild!\n");
+            }
         }
         
-    	if(s_MangeCan.FileFd[CanFd] != NULL)
-    	{
-    		fclose(s_MangeCan.FileFd[CanFd]);
-    	}
+        if(s_MangeCan.FileFd[CanFd] != NULL)
+        {
+            fclose(s_MangeCan.FileFd[CanFd]);
+        }
     }
 
     /* 如果任务已经创建则删除任务 */
     if(s_MangeIoCnt.IoCntTid > 0)
     {
-    	if(s_MangeIoCnt.IoCntFileFd != NULL)
-    		fclose(s_MangeIoCnt.IoCntFileFd);
-    	taskDelete(s_MangeIoCnt.IoCntTid);
+        if(s_MangeIoCnt.IoCntFileFd != NULL)
+            fclose(s_MangeIoCnt.IoCntFileFd);
+        taskDelete(s_MangeIoCnt.IoCntTid);
     }
 
     /* 如果任务已经创建则删除任务 */
     if(s_MangeCom.ComTid > 0)
     {
-    	if(s_MangeCom.ComFileFd != NULL)
-    		fclose(s_MangeCom.ComFileFd);
-    	taskDelete(s_MangeCom.ComTid);
+        if(s_MangeCom.ComFileFd != NULL)
+            fclose(s_MangeCom.ComFileFd);
+        taskDelete(s_MangeCom.ComTid);
     }
 
     return 0;
@@ -705,24 +706,37 @@ para            void*           input               任务参数
 函数说明:   任务等待驱动触发事件(接收到数据)，接收数据
 并计数
 修改记录:   2016-06-23  王  明    创建
+            2016-10-22  王  明    修改  客户协议修改增加mems陀螺数据保存
+                                        单独保存一个文件
 ********************************************************************/
 static int tComQmsgReceive(void)
 {
     int nByte = 0;
     char filename[50];
     unsigned long fileSize = 0;
+    unsigned long fileSize2 = 0;
     ComQmsg_t ComQmsg;
 
     FileFormat_t format[] =
     {
         {"Num", 0},
-        {"Wx", 0},
-        {"Wy", 0},
-        {"Wz", 0},
+        {"Fog_Gx", 0},
+        {"Fog_Gy", 0},
+        {"Fog_Gz", 0},
+        {"Mems_Gx", 0},
+        {"Mems_Gy", 0},
+        {"Mems_Gz", 0},
+        {"T", 0},
+        {NULL, 0},
+        {NULL, 0},
+    };
+    
+    FileFormat_t format2[] =
+    {
+        {"Num", 0},
         {"Ax", 0},
         {"Ay", 0},
         {"Az", 0},
-        {"T", 0},
         {NULL, 0},
         {NULL, 0},
     };
@@ -739,9 +753,22 @@ static int tComQmsgReceive(void)
         {
 
             sprintf(filename, "RS422_IMU_Data");
-            /* s_MangeCom.ComFileFd = CreatLogFile((char *)filename, format); */
+
             s_MangeCom.ComFileFd = CreatRollTimeFile((char *)filename, format, "/ata0a/DATA");
             if(s_MangeCom.ComFileFd == NULL)
+            {
+                printf("Open %s file faild!\n", filename);
+                return -1;
+            }
+        }
+
+        if(s_MangeCom.ComFileFd2 == NULL)
+        {
+
+            sprintf(filename, "RS422_MEMS_Data");
+
+            s_MangeCom.ComFileFd2 = CreatRollTimeFile((char *)filename, format2, "/ata0a/DATA");
+            if(s_MangeCom.ComFileFd2 == NULL)
             {
                 printf("Open %s file faild!\n", filename);
                 return -1;
@@ -750,25 +777,32 @@ static int tComQmsgReceive(void)
 
         /* 定义文件表头注意最后一个必须写NULL */
         format[0].Value = ComQmsg.num;
-        format[1].Value = ComQmsg.ax;
-        format[2].Value = ComQmsg.ay;
-        format[3].Value = ComQmsg.az;
-        format[4].Value = ComQmsg.wx;
-        format[5].Value = ComQmsg.wy;
-        format[6].Value = ComQmsg.wz;
+        format[1].Value = ComQmsg.fog_gx;
+        format[2].Value = ComQmsg.fog_gy;
+        format[3].Value = ComQmsg.fog_gz;
+        format[4].Value = ComQmsg.ax;
+        format[5].Value = ComQmsg.ay;
+        format[6].Value = ComQmsg.az;
         format[7].Value = ComQmsg.temp;
+        
+        /* 定义文件表头注意最后一个必须写NULL */
+        format2[0].Value = ComQmsg.num;
+        format2[1].Value = ComQmsg.mems_gx;
+        format2[2].Value = ComQmsg.mems_gy;
+        format2[3].Value = ComQmsg.mems_gz;
 
         /* 判断读取到的数据大小 */
         WriteLogFile(s_MangeCom.ComFileFd, format, ComQmsg.time);
 
+        WriteLogFile(s_MangeCom.ComFileFd2, format2, ComQmsg.time);
+
         /* 查询文件大小 */
         fileSize = FileSize(s_MangeCom.ComFileFd);
-
         if(fileSize >= SIGAL_FILE_MAX_SIZE)
         {
             fflush(s_MangeCom.ComFileFd);
             fclose(s_MangeCom.ComFileFd);
-            /* s_MangeCom.ComFileFd = CreatLogFile((char *)filename, format); */
+
             s_MangeCom.ComFileFd = CreatRollTimeFile((char *)filename, format, "/ata0a/DATA");
             if(s_MangeCom.ComFileFd == NULL)
             {
@@ -776,9 +810,20 @@ static int tComQmsgReceive(void)
                 return -1;
             }
         }
-        else    /* 如果没有超出规定大小责继续执行程序 */
+
+        /* 查询文件大小 */
+        fileSize2 = FileSize(s_MangeCom.ComFileFd2);
+        if(fileSize2 >= SIGAL_FILE_MAX_SIZE)
         {
-            continue;
+            fflush(s_MangeCom.ComFileFd2);
+            fclose(s_MangeCom.ComFileFd2);
+
+            s_MangeCom.ComFileFd2 = CreatRollTimeFile((char *)filename, format2, "/ata0a/DATA");
+            if(s_MangeCom.ComFileFd2 == NULL)
+            {
+                printf("Open %s file faild!\n", filename);
+                return -1;
+            }
         }
     } /* end for */
 

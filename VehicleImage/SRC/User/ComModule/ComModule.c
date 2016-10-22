@@ -268,6 +268,7 @@ ComQmsg_t *     msg             output              返回消息结构
 
 修改记录:   2016-07-14  王  明    创建
             2016-08-12  周绍兴    修改  函数解析接收的串口帧
+            2016-10-22  王  明    修改  客户协议修改增加mems陀螺数据
 ********************************************************************/
 static int AnalyzeComFrame(unsigned char *buffer, unsigned int buffersize, ComQmsg_t *msg)
 {
@@ -298,14 +299,19 @@ static int AnalyzeComFrame(unsigned char *buffer, unsigned int buffersize, ComQm
             {
                 /* 和校验错误 */
                 msg->num = -1;
+                msg->fog_gx = -1;
+                msg->fog_gy = -1;
+                msg->fog_gz = -1;
+                
+                msg->mems_gx = -1;
+                msg->mems_gy = -1;
+                msg->mems_gz = -1;
+                
                 msg->ax = -1;
                 msg->ay = -1;
                 msg->az = -1;
-                msg->wx = -1;
-                msg->wy = -1;
-                msg->wz = -1;
-                msg->temp = -1;
 
+                msg->temp = -1;
                 ret = -2;
 
                 pHeader++;
@@ -314,13 +320,19 @@ static int AnalyzeComFrame(unsigned char *buffer, unsigned int buffersize, ComQm
             {
                 /* 具体数据解析按客户协议,目前只是简单的赋值 */
                 msg->num = *(int *)(pHeader + 4);
-                msg->ax =  *(int *)(pHeader + 8);
-                msg->ay = *(int *)(pHeader + 12);
-                msg->az = *(int *)(pHeader + 16);
-                msg->wx = *(int *)(pHeader + 20);
-                msg->wy = *(int *)(pHeader + 24);
-                msg->wz = *(int *)(pHeader + 28);
-                msg->temp = *(short *)(pHeader + 32);
+                msg->fog_gx =  *(int *)(pHeader + 8);
+                msg->fog_gy = *(int *)(pHeader + 12);
+                msg->fog_gz = *(int *)(pHeader + 16);
+                
+                msg->mems_gx = *(int *)(pHeader + 20);
+                msg->mems_gy = *(int *)(pHeader + 24);
+                msg->mems_gz = *(int *)(pHeader + 28);
+                
+                msg->ax = *(int *)(pHeader + 32);
+                msg->ay = *(int *)(pHeader + 36);
+                msg->az = *(int *)(pHeader + 40);
+                
+                msg->temp = *(short *)(pHeader + 44);
                 ret = 0;
                 break;
             }
@@ -337,12 +349,18 @@ static int AnalyzeComFrame(unsigned char *buffer, unsigned int buffersize, ComQm
     {
         /* 找不到帧 */
         msg->num = -2;
+        msg->fog_gx = -2;
+        msg->fog_gy = -2;
+        msg->fog_gz = -2;
+        
+        msg->mems_gx = -2;
+        msg->mems_gy = -2;
+        msg->mems_gz = -2;
+        
         msg->ax = -2;
         msg->ay = -2;
         msg->az = -2;
-        msg->wx = -2;
-        msg->wy = -2;
-        msg->wz = -2;
+
         msg->temp = -2;
     }
 
@@ -368,6 +386,7 @@ para            void*           input               任务参数
             的核心函数。
 
 修改记录:   2016-08-12  周绍兴    创建   函数解析接收的串口帧
+            2016-10-22  王  明    修改  客户协议修改增加mems陀螺数据
 ********************************************************************/
 BOOL RecvCom(void)
 {
@@ -473,12 +492,18 @@ BOOL RecvCom(void)
     {
         /* 接收失败 */
         ComQmsg.num = -3;
+        ComQmsg.fog_gx = -3;
+        ComQmsg.fog_gy = -3;
+        ComQmsg.fog_gz = -3;
+        
+        ComQmsg.mems_gx = -3;
+        ComQmsg.mems_gy = -3;
+        ComQmsg.mems_gz = -3;
+        
         ComQmsg.ax = -3;
         ComQmsg.ay = -3;
         ComQmsg.az = -3;
-        ComQmsg.wx = -3;
-        ComQmsg.wy = -3;
-        ComQmsg.wz = -3;
+
         ComQmsg.temp = -3;
     }
 
@@ -511,6 +536,7 @@ fd              int             input               串口fd
 
 修改记录:   2016-08-11  王  明    创建
             2016-08-12  周绍兴    修改
+            2016-10-22  王  明    修改  客户协议修改增加mems陀螺数据
 ********************************************************************/
 BOOL RecvAnalyzeComData(int fd)
 {
@@ -582,13 +608,19 @@ BOOL RecvAnalyzeComData(int fd)
                         checkSum = CheckComSum((const char *)pHeader, (COM_MAX_FRAME_SIZE - 1));
 
                         ComQmsg.num = *(int *)(pHeader + 4);
-                        ComQmsg.ax =  *(int *)(pHeader + 8);
-                        ComQmsg.ay = *(int *)(pHeader + 12);
-                        ComQmsg.az = *(int *)(pHeader + 16);
-                        ComQmsg.wx = *(int *)(pHeader + 20);
-                        ComQmsg.wy = *(int *)(pHeader + 24);
-                        ComQmsg.wz = *(int *)(pHeader + 28);
-                        ComQmsg.temp = *(short *)(pHeader + 32);
+                        ComQmsg.fog_gx =  *(int *)(pHeader + 8);
+                        ComQmsg.fog_gy = *(int *)(pHeader + 12);
+                        ComQmsg.fog_gz = *(int *)(pHeader + 16);
+                        
+                        ComQmsg.mems_gx = *(int *)(pHeader + 20);
+                        ComQmsg.mems_gy = *(int *)(pHeader + 24);
+                        ComQmsg.mems_gz = *(int *)(pHeader + 28);
+                        
+                        ComQmsg.ax = *(int *)(pHeader + 32);
+                        ComQmsg.ay = *(int *)(pHeader + 36);
+                        ComQmsg.az = *(int *)(pHeader + 40);
+                        
+                        ComQmsg.temp = *(short *)(pHeader + 44);
 
                         if(checkSum != pHeader[COM_MAX_FRAME_SIZE - 1])
                         {
@@ -597,12 +629,18 @@ BOOL RecvAnalyzeComData(int fd)
 
                             /* 和校验错误 */
                             ComQmsg.num = -1;
+                            ComQmsg.fog_gx = -1;
+                            ComQmsg.fog_gy = -1;
+                            ComQmsg.fog_gz = -1;
+                            
+                            ComQmsg.mems_gx = -1;
+                            ComQmsg.mems_gy = -1;
+                            ComQmsg.mems_gz = -1;
+                            
                             ComQmsg.ax = -1;
                             ComQmsg.ay = -1;
                             ComQmsg.az = -1;
-                            ComQmsg.wx = -1;
-                            ComQmsg.wy = -1;
-                            ComQmsg.wz = -1;
+
                             ComQmsg.temp = -1;
 
                             ret = -2;
@@ -627,12 +665,18 @@ BOOL RecvAnalyzeComData(int fd)
 
                     /* 接收失败 */
                     ComQmsg.num = -3;
+                    ComQmsg.fog_gx = -3;
+                    ComQmsg.fog_gy = -3;
+                    ComQmsg.fog_gz = -3;
+                    
+                    ComQmsg.mems_gx = -3;
+                    ComQmsg.mems_gy = -3;
+                    ComQmsg.mems_gz = -3;
+                    
                     ComQmsg.ax = -3;
                     ComQmsg.ay = -3;
                     ComQmsg.az = -3;
-                    ComQmsg.wx = -3;
-                    ComQmsg.wy = -3;
-                    ComQmsg.wz = -3;
+
                     ComQmsg.temp = -3;
                 }
 

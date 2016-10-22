@@ -149,9 +149,9 @@ Exit:
 ********************************************************************/
 int AppDelete(void)
 {
-	/* 必须先移除MangeFileModule */
-	RemoveMangeFileModule();
-	RemoveCanModule();
+    /* 必须先移除MangeFileModule */
+    RemoveMangeFileModule();
+    RemoveCanModule();
     RemoveIoCntModule();
     RemoveComModule();
     RemoveMangeUsbModule();
