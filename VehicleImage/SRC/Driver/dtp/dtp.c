@@ -1761,7 +1761,7 @@ int com_transmit()
 
     /* 配置串口参数 */
     /* 数据位8位 停止位1位 奇校验 本地模式 */
-    ret += ioctl(fd, SIO_HW_OPTS_SET, CREAD | CS8);
+    ret += ioctl(fd, SIO_HW_OPTS_SET, CLOCAL | CS8 | PARODD | PARENB);
     ret += ioctl(fd, FIOBAUDRATE, g_com_baud);  /* 波特率 */
     ret += ioctl(fd, FIOSETOPTIONS, OPT_RAW);   /* 原始模式OPT_RAW 行模式OPT_LINE 根据情况选择 */
     ret += ioctl(fd, FIOFLUSH, 0);              /* 清空缓冲区 */

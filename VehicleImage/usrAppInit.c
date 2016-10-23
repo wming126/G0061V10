@@ -29,8 +29,6 @@ Initialize user application code.
 #include "ioLib.h"
 #include "taskLib.h"
 #include <usb2/usb2Helper.h>
-#include "dirent.h"
-#include "stat.h"
 
 #define INCLUDE_APP_ENTRY   1
 

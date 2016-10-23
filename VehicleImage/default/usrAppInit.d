@@ -163,8 +163,4 @@ usrAppInit.o: ../usrAppInit.c C:/WindRiver/vxworks-6.8/target/h/vxWorks.h \
   C:/WindRiver/vxworks-6.8/target/h/arch/i86/cacheI86Lib.h \
   C:/WindRiver/vxworks-6.8/target/h/usb/usbd.h \
   C:/WindRiver/vxworks-6.8/target/h/usb/usbHst.h \
-  C:/WindRiver/vxworks-6.8/target/h/usb/usbHcdInstr.h \
-  C:/WindRiver/vxworks-6.8/target/h/dirent.h \
-  C:/WindRiver/vxworks-6.8/target/h/sys/stat.h \
-  C:/WindRiver/vxworks-6.8/target/h/stat.h \
-  C:/WindRiver/vxworks-6.8/target/h/sys/stat.h
+  C:/WindRiver/vxworks-6.8/target/h/usb/usbHcdInstr.h
