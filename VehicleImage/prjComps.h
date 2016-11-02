@@ -2,7 +2,7 @@
 
 
 /*
-GENERATED: Sun Oct 23 15:07:22 +0800 2016
+GENERATED: Sun Oct 30 10:48:29 +0800 2016
 DO NOT EDIT - file is regenerated whenever the project changes
 */
 

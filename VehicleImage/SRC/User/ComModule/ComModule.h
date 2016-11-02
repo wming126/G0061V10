@@ -27,7 +27,7 @@
 #define COM_MAX_QMSG            1000            /* 消息队列长度 */
 
 #define COM_CYCLE               ((float)(1.0/COM_BAUD_RATE))    /* 发送一个bit需要的时间单位s */
-#define COM_MAX_FRAME_SIZE      38              /* 一帧数据长度 */
+#define COM_MAX_FRAME_SIZE      50              /* 一帧数据长度 */
 #define RNG_BUFFER_SIZE         (COM_MAX_FRAME_SIZE * 10)
 #define COM_PER_BYTE_BIT        10              /* 串口格式为8N1时每个字节bit数为10bit */
 

@@ -2,7 +2,7 @@
 
 /* CREATED BY C:/WindRiver/vxworks-6.8/host/resource/hutils/tcl/makeSymTbl.tcl
  *  WITH ARGS pentium tmp.o symTbl.c
- *         ON Sun Oct 23 15:08:32 +0800 2016
+ *         ON Tue Nov 01 18:24:56 +0800 2016
  */
 
 #include "vxWorks.h"

@@ -24,6 +24,8 @@
 #include "..\SRC\Driver\rtc\RtcLib.h"
 #include "CanModule.h"
 
+
+
 /* 宏定义 */
 #define CAN_MODULE_DEBUG    0
 
@@ -438,10 +440,10 @@ static int tCanReceive(int fd)
                 printf("CbioId = 0x383\n");
 #endif
                 GetTime(time, 3);
-                sprintf(msg.time, "%s", time);
+				sprintf(msg.time, "%s", time);
 
                 /* 将数据封装到Qmsg结构体中  */
-                msg.counter = ((frame.buffer[5] << 8) + frame.buffer[4]);
+                msg.counter = ((frame.buffer[4] << 8) + frame.buffer[3]);
                 msg.CBIO_ID = 0x383;
 
                 /* 将msg消息发送给文件管理模块 */
@@ -460,7 +462,7 @@ static int tCanReceive(int fd)
 #endif
                 
                 /* 将数据封装到Qmsg结构体中  */
-                msg.counter = ((frame.buffer[5] << 8) + frame.buffer[4]);
+                msg.counter = ((frame.buffer[4] << 8) + frame.buffer[3]);
                 msg.CBIO_ID = 0x483;
 
                 /* 将msg消息发送给文件管理模块 */
