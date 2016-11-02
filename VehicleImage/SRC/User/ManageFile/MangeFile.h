@@ -21,6 +21,7 @@
 
 /* #define QMSG_TIME_OUT               (1 * sysClkRateGet()) */
 #define QMSG_TIME_OUT                  (WAIT_FOREVER)
+#define CAN_QMSG_TIME_OUT              (2 * sysClkRateGet())
 
 #define CAN_QMSG_TASK_PRIORITY          111         /* 任务优先级 */
 
@@ -45,7 +46,7 @@
 #define CNT_FILE_PATH                   "/ata0a/DATA"   /* 临时调试 */
 #define COM_FILE_PATH                   "/ata0a/DATA"   /* 临时调试 */
 
-#define SIGAL_FILE_MAX_SIZE             2147483647      /* 文件大小最大为2147483647 (1024 * 1024 * 1024 * 2 - 1 = 2147483647) */
+#define SIGAL_FILE_MAX_SIZE             1073741823      /* 文件大小最大为2147483647 (1024 * 1024 * 1024 * 2 - 1 = 2147483647) */
 
 #ifdef __cplusplus
 extern "C" {

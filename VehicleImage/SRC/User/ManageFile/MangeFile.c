@@ -171,7 +171,7 @@ para            void*           input               任务参数
 FILE *CreatRollTimeFile(char *str, FileFormat_t format[], char * dir)
 {
 #define SORPORT_MAX_FILE_NUM    100
-#define SAVE_MAX_FILE_NUM       5    /* 滚动文件个数 */
+#define SAVE_MAX_FILE_NUM       10    /* 滚动文件个数 */
     int i = 0;
     DIR *dirptr = NULL;
     struct dirent *entry;
@@ -546,7 +546,7 @@ static int tCanQmsgReceive(int CanFd)
         memset((char *)&CanQmsg, '\0', sizeof(CanQmsg_t));
 
         /* 接收can功能模块发来的消息 */
-        nByte = msgQReceive(g_CanMsgID[CanFd], (char *)&CanQmsg, sizeof(CanQmsg_t), QMSG_TIME_OUT);
+        nByte = msgQReceive(g_CanMsgID[CanFd], (char *)&CanQmsg, sizeof(CanQmsg_t), CAN_QMSG_TIME_OUT);
 
 #if 0
         printf("msgQReceive!\n");
@@ -595,6 +595,14 @@ static int tCanQmsgReceive(int CanFd)
         else    /* 如果没有超出规定大小责继续执行程序 */
         {
             continue;
+        }
+     /* 消息超时 */
+  if(nByte < sizeof(CanQmsg_t) || nByte == ERROR)
+        {
+            if(s_MangeCan.FileFd[CanFd] != NULL)
+            {
+                fflush(s_MangeCan.FileFd[CanFd]);
+            }
         }
 
     } /* end for */
@@ -723,9 +731,9 @@ static int tComQmsgReceive(void)
         {"Fog_Gx", 0},
         {"Fog_Gy", 0},
         {"Fog_Gz", 0},
-        {"Mems_Gx", 0},
-        {"Mems_Gy", 0},
-        {"Mems_Gz", 0},
+        {"AX", 0},
+        {"AY", 0},
+        {"AZ", 0},
         {"T", 0},
         {NULL, 0},
         {NULL, 0},
@@ -734,9 +742,9 @@ static int tComQmsgReceive(void)
     FileFormat_t format2[] =
     {
         {"Num", 0},
-        {"Ax", 0},
-        {"Ay", 0},
-        {"Az", 0},
+        {"Mems_Gx", 0},
+        {"Mems_Gy", 0},
+        {"Mems_Gz", 0},
         {NULL, 0},
         {NULL, 0},
     };

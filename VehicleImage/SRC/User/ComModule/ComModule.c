@@ -472,6 +472,7 @@ BOOL RecvCom(void)
 #if 0
     /* 打印原始数据 */
     printf("\n------------------ComRecv--------------------\n");
+    int i;
     for(i = 0; i < (pData - RxBuffer); i++)
     {
         printf("%-#4x ", RxBuffer[i]);
